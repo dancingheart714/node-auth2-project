@@ -18,9 +18,9 @@ const db = require('../../data/db-config.js');
     ]
    */
 function find() {
-  return db('users as u')
-    .join('roles as r', 'u.role_id', '=', 'r.role_id')
-    .select('u.user_id', 'u.username', 'r.role_name');
+  return db('users')
+    .join('roles', 'users.role_id', 'roles.role_id')
+    .select('user_id', 'username', 'role_name');
 }
 
 /**
@@ -55,10 +55,9 @@ function findBy(filter) {
    */
 function findById(user_id) {
   return db('users as u')
-    .join('roles as r', 'u.role_id', '=', 'r.role_id')
-    .select('u.user_id', 'u.username', r.role_name)
+    .innerJoin('roles as r', 'r.role_id', 'u.role_id')
     .where('u.user_id', user_id)
-    .first();
+    .first('u.user_id', 'u.username', 'r.role_name');
 }
 
 /**
